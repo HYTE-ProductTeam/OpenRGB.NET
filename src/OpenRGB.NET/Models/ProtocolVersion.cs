@@ -9,13 +9,15 @@ public readonly struct ProtocolVersion
 {
     private ProtocolVersion(uint number,
         bool supportsVendorString, bool supportsProfileControls,
-        bool supportsBrightnessAndSaveMode, bool supportsSegmentsAndPlugins)
+        bool supportsBrightnessAndSaveMode, bool supportsSegmentsAndPlugins,
+        bool supportsRescan)
     {
         Number = number;
         SupportsVendorString = supportsVendorString;
         SupportsProfileControls = supportsProfileControls;
         SupportsBrightnessAndSaveMode = supportsBrightnessAndSaveMode;
         SupportsSegmentsAndPlugins = supportsSegmentsAndPlugins;
+        SupportsRescan = supportsRescan;
     }
 
     /// <summary>
@@ -42,36 +44,46 @@ public readonly struct ProtocolVersion
     ///     Whether the protocol version supports segments
     /// </summary>
     public bool SupportsSegmentsAndPlugins { get; }
-    
+
+    /// <summary>
+    /// Whether the protocol version supports rescan devices
+    /// </summary>
+    public bool SupportsRescan { get; }
+
     /// <summary>
     ///     The invalid protocol version.
     /// </summary>
-    public static readonly ProtocolVersion Invalid = new(0, false, false, false, false);
+    public static readonly ProtocolVersion Invalid = new(0, false, false, false, false, false);
 
     /// <summary>
     ///     The protocol version 0, the initial release.
     /// </summary>
-    public static readonly ProtocolVersion V0 = new(0, false, false, false, false);
+    public static readonly ProtocolVersion V0 = new(0, false, false, false, false, false);
 
     /// <summary>
     ///     The protocol version 1, with vendor string.
     /// </summary>
-    public static readonly ProtocolVersion V1 = new(1, true, false, false, false);
+    public static readonly ProtocolVersion V1 = new(1, true, false, false, false, false);
 
     /// <summary>
     ///     The protocol version 2, with profile controls.
     /// </summary>
-    public static readonly ProtocolVersion V2 = new(2, true, true, false, false);
+    public static readonly ProtocolVersion V2 = new(2, true, true, false, false, false);
 
     /// <summary>
     ///     The protocol version 3, with brightness and save mode.
     /// </summary>
-    public static readonly ProtocolVersion V3 = new(3, true, true, true, false);
+    public static readonly ProtocolVersion V3 = new(3, true, true, true, false, false);
 
     /// <summary>
     ///     The protocol version 4, with segments.
     /// </summary>
-    public static readonly ProtocolVersion V4 = new(4, true, true, true, true);
+    public static readonly ProtocolVersion V4 = new(4, true, true, true, true, false);
+
+    /// <summary>
+    /// The protocol version 5, with rescan devices
+    /// </summary>
+    public static readonly ProtocolVersion V5 = new(5, true, true, true, true, true);
 
     /// <summary>
     ///     Gets a protocol version from a number
@@ -83,6 +95,7 @@ public readonly struct ProtocolVersion
         2 => V2,
         3 => V3,
         4 => V4,
+        5 => V5,
         _ => throw new ArgumentOutOfRangeException(nameof(number), number, "Unknown protocol version")
     };
 }
