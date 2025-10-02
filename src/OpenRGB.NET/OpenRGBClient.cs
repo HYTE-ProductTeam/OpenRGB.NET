@@ -8,7 +8,7 @@ namespace OpenRGB.NET;
 /// </summary>
 public sealed class OpenRgbClient : IDisposable, IOpenRgbClient
 {
-    private const int MaxProtocolNumber = 4;
+    private const int MaxProtocolNumber = 5;
     private readonly string _name;
     private readonly string _ip;
     private readonly int _port;
@@ -47,13 +47,19 @@ public sealed class OpenRgbClient : IDisposable, IOpenRgbClient
         _name = name;
         _timeoutMs = timeoutMs;
         _protocolVersionNumber = protocolVersionNumber;
-        _connection = new OpenRgbConnection(DeviceListUpdated);
+        _connection = new OpenRgbConnection();
+        _connection.DeviceListUpdated += (sender, args) => DeviceListUpdated?.Invoke(this, args);
 
         if (protocolVersionNumber > MaxProtocolNumber)
             throw new ArgumentException("Client protocol version provided higher than supported.",
                 nameof(protocolVersionNumber));
 
         if (autoConnect) Connect();
+    }
+
+    public void Rescan()
+    {
+        _connection.Send(CommandId.RescanDevices, 0, new EmptyArg());
     }
 
     /// <inheritdoc />

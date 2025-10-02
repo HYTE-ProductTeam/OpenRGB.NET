@@ -31,6 +31,11 @@ public enum CommandId : uint
     DeviceListUpdated = 100,
 
     /// <summary>
+    /// Rescan devices
+    /// </summary>
+    RescanDevices = 140,
+
+    /// <summary>
     ///     Request list of profiles from the server.
     /// </summary>
     RequestProfiles = 150,

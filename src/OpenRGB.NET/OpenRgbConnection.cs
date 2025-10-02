@@ -25,15 +25,13 @@ internal sealed class OpenRgbConnection : IDisposable
 
     public EventHandler<EventArgs>? DeviceListUpdated { get; set; }
 
-    public OpenRgbConnection(EventHandler<EventArgs>? OnDeviceListUpdated)
+    public OpenRgbConnection()
     {
         _cancellationTokenSource = new CancellationTokenSource();
         _socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
         _socket.NoDelay = true; //Send all data immediately, we rely on the order of packets
         _pendingRequests = Enum.GetValues(typeof(CommandId)).Cast<CommandId>()
             .ToDictionary(c => c, _ => new BlockingCollection<byte[]>());
-
-        DeviceListUpdated = OnDeviceListUpdated;
     }
 
     public void Connect(string name, string ip, int port, int timeoutMs, uint protocolVersionNumber = 4)
